@@ -1,0 +1,192 @@
+---
+title: "Carolina Data Challenge"
+author: "Anish Kompella"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+options(scipen=999)
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+greenhouse<-read.csv('Annual_Greenhouse_Gas_(GHG)_Air_Emissions_Accounts (3).csv')
+greenhouse2<-select(greenhouse, X, X.9, X.10, X.12, X.13, X.14, X.15, X.16, X.17, X.18, X.19, X.20, X.21, X.22, X.23)
+greenhouse3<-greenhouse2 %>%  filter(!row_number() %in% c(1))
+greenhouse4 <- subset(greenhouse3, X.9 != c('Total Household', 'Total Industry and Households'))
+greenhouse5<-subset(greenhouse4, X.10!='Greenhouse Gas')
+greenhouse5
+double_greenhouse<-greenhouse5%>%
+  mutate(X.12 = as.numeric(X.12))%>%
+  mutate(X.13 = as.numeric(X.13))%>%
+  mutate(X.14 = as.numeric(X.14))%>%
+  mutate(X.15 = as.numeric(X.15))%>%
+  mutate(X.16 = as.numeric(X.16))%>%
+  mutate(X.17 = as.numeric(X.17))%>%
+  mutate(X.18 = as.numeric(X.18))%>%
+  mutate(X.19 = as.numeric(X.19))%>%
+  mutate(X.20 = as.numeric(X.20))%>%
+  mutate(X.21 = as.numeric(X.21))%>%
+  mutate(X.22 = as.numeric(X.22))%>%
+  mutate(X.23 = as.numeric(X.23))
+```
+
+```{r}
+double_greenhouse
+adv_econ<-filter(double_greenhouse, X=='Advanced Economies')
+adv_econ2<-select(adv_econ, c(-X, -X.9, -X.10))
+adv_means<-colMeans(adv_econ2)
+
+africa<-filter(double_greenhouse, X=='Africa')
+africa2<-select(africa, c(-X, -X.9, -X.10))
+africa_means<-colMeans(africa2)
+
+
+
+americas<-filter(double_greenhouse, X=='Americas')
+america2<-select(americas, c(-X, -X.9, -X.10))
+america_means<-colMeans(america2)
+
+
+
+americas<-filter(double_greenhouse, X=='Americas')
+america2<-select(americas, c(-X, -X.9, -X.10))
+america_means<-colMeans(america2)
+
+
+europe<-filter(double_greenhouse, X=='Europe')
+europe2<-select(europe, c(-X, -X.9, -X.10))
+europe_means<-colMeans(europe2)
+
+
+europe<-filter(double_greenhouse, X=='Europe')
+europe2<-select(europe, c(-X, -X.9, -X.10))
+europe_means<-colMeans(europe2)
+
+emerging<-filter(double_greenhouse, X=='Emerging and Developing Economies')
+emerging2<-select(emerging, c(-X, -X.9, -X.10))
+emerging_means<-colMeans(emerging2)
+
+northern<-filter(double_greenhouse, X=='Northern America')
+northern2<-select(northern, c(-X, -X.9, -X.10))
+northern_means<-colMeans(northern2)
+
+asia<-filter(double_greenhouse, X=='Asia')
+asia2<-select(asia, c(-X, -X.9, -X.10))
+asia_means<-colMeans(asia2)
+
+latin<-filter(double_greenhouse, X=='Latin America and the Caribbean')
+latin2<-select(latin, c(-X, -X.9, -X.10))
+latin_means<-colMeans(latin2)
+
+south_asia<-filter(double_greenhouse, X=='Southern Asia')
+south_asia2<-select(south_asia, c(-X, -X.9, -X.10))
+south_asia_means<-colMeans(south_asia2)
+
+central_asia<-filter(double_greenhouse, X=='Central Asia')
+central_asia2<-select(central_asia, c(-X, -X.9, -X.10))
+central_asia_means<-colMeans(central_asia2)
+
+southeastern<-filter(double_greenhouse, X=='South-eastern Asia')
+southeastern2<-select(southeastern, c(-X, -X.9, -X.10))
+southeastern_means<-colMeans(southeastern2)
+
+western<-filter(double_greenhouse, X=='Western Asia')
+western2<-select(western, c(-X, -X.9, -X.10))
+western_asia_means<-colMeans(western2)
+
+eastern<-filter(double_greenhouse, X=='Eastern Asia')
+eastern2<-select(eastern, c(-X, -X.9, -X.10))
+eastern_asia_means<-colMeans(eastern2)
+
+world<-filter(double_greenhouse, X=='World')
+world2<-select(world, c(-X, -X.9, -X.10))
+world_means<-colMeans(world2)
+
+country_means = data.frame(
+  "years" = c(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021),
+  "adv econ"= c(adv_means),
+  "africa" = c(africa_means),
+  "america" = america_means,
+  "europe"= europe_means,
+  "emerging" = emerging_means,
+  "northern"= northern_means,
+  "asia" = asia_means,
+  "latin america" = latin_means,
+  "south asia" = south_asia_means,
+  "central asia" = central_asia_means,
+  "southeastern asia"= southeastern_means,
+  "western asia" = western_asia_means,
+  "eastern asia" = eastern_asia_means,
+  "world" = world_means
+)  
+country_means
+
+ggplot(country_means, aes(x=years)) + 
+  geom_line(aes(y = africa), color = "darkred") +
+  geom_line(aes(y = adv.econ), color = "blue") +
+  geom_line(aes(y = europe), color = "orange") +
+  geom_line(aes(y = emerging), color = "cyan") +
+  geom_line(aes(y = northern), color = "green") +
+  geom_line(aes(y = asia), color = "magenta") +
+  geom_line(aes(y = world), color = "black", size = 1) +
+  geom_line(aes(y = latin.america), color = "yellow") +
+  labs(
+    title = "Analysis of Emissions by Region",
+    x = "Years",
+    y = "Emissions(Million metric tons of CO2)",
+  )
+
+ggplot(country_means, aes(x=years)) + 
+  geom_line(aes(y = south.asia), color = "darkred") +
+  geom_line(aes(y = central.asia), color = "blue") +
+  geom_line(aes(y = southeastern.asia), color = "pink") +
+  geom_line(aes(y = western.asia), color = "purple") +
+  geom_line(aes(y = eastern.asia), color = "green") +
+  labs(
+    title = "Analysis of Emissions in Asia",
+    x = "Years",
+    y = "Emissions(Million metric tons of CO2)",
+  )
+```
+```{r}
+ggplot(data = country_means) + 
+  geom_point(mapping = aes(x = years, y = world))
+
+country_means %>%  
+  lm(formula = world ~ years)
+country_means %>%  
+  lm(formula = south.asia ~ years)
+
+country_means %>%  
+  lm(formula = eastern.asia ~ years)
+
+country_means %>%  
+  lm(formula = africa ~ years)
+
+```
